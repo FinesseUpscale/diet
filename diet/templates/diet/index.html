@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'diet/style.css' %}" />
+
+    <title>MFP Diary Name Automator</title>
+  </head>
+  <body>
+    
+    <form>
+      <fieldset>
+        
+        <label class="col-12 col-form-label mealheader">Credentials</label>
+        <!--Username-->
+        <div class="form-group">
+          <label for="InputUsername">Email address</label>
+          <input class="form-control" id="InputUsername" aria-describedby="emailHelp" placeholder="Enter username/email" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAfBJREFUWAntVk1OwkAUZkoDKza4Utm61iP0AqyIDXahN2BjwiHYGU+gizap4QDuegWN7lyCbMSlCQjU7yO0TOlAi6GwgJc0fT/fzPfmzet0crmD7HsFBAvQbrcrw+Gw5fu+AfOYvgylJ4TwCoVCs1ardYTruqfj8fgV5OUMSVVT93VdP9dAzpVvm5wJHZFbg2LQ2pEYOlZ/oiDvwNcsFoseY4PBwMCrhaeCJyKWZU37KOJcYdi27QdhcuuBIb073BvTNL8ln4NeeR6NRi/wxZKQcGurQs5oNhqLshzVTMBewW/LMU3TTNlO0ieTiStjYhUIyi6DAp0xbEdgTt+LE0aCKQw24U4llsCs4ZRJrYopB6RwqnpA1YQ5NGFZ1YQ41Z5S8IQQdP5laEBRJcD4Vj5DEsW2gE6s6g3d/YP/g+BDnT7GNi2qCjTwGd6riBzHaaCEd3Js01vwCPIbmWBRx1nwAN/1ov+/drgFWIlfKpVukyYihtgkXNp4mABK+1GtVr+SBhJDbBIubVw+Cd/TDgKO2DPiN3YUo6y/nDCNEIsqTKH1en2tcwA9FKEItyDi3aIh8Gl1sRrVnSDzNFDJT1bAy5xpOYGn5fP5JuL95ZjMIn1ya7j5dPGfv0A5eAnpZUY3n5jXcoec5J67D9q+VuAPM47D3XaSeL4AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;" type="email">
+        </div>
+        
+        <!--Password-->
+        <div class="form-group">
+          <label for="InputPassword1">Password</label>
+          <input class="form-control" id="exampleInputPassword1" placeholder="Password" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABKRJREFUWAnNl0tsVGUUxzvTTlslZUaCloZHY6BRFkp9sDBuqgINpaBp02dIDImwKDG6ICQ8jBYlhg0rxUBYEALTpulMgBlqOqHRDSikJkZdGG0CRqAGUuwDovQ1/s7NPTffnTu3zMxGvuT2vP7n8Z3vu+dOi4r+5xUoJH8sFquamZmpTqfTVeIfCARGQ6HQH83NzaP5xsu5gL6+vuVzc3NdJN1Kkhd8Ev1MMYni4uJjra2tt3wwLvUjCxgYGFg8Pj7+MV5dPOUub3/hX0zHIpFId0NDw6Q/jO4tZOzv76+Znp6+AOb5TBw7/YduWC2Hr4J/IhOD/GswGHy7vb39tyw2S+VbAC1/ZXZ29hKoiOE8RrIvaPE5WvyjoS8CX8sRvYPufYpZYtjGS0pKNoD/wdA5bNYCCLaMYMMEWq5IEn8ZDof3P6ql9pF9jp8cma6bFLGeIv5ShdISZUzKzqPIVnISp3l20caTJsaPtwvc3dPTIx06ziZkkyvY0FnoW5l+ng7guAWnpAI5w4MkP6yy0GQy+dTU1JToGm19sqKi4kBjY+PftmwRYn1ErEOq4+i2tLW1DagsNGgKNv+p6tj595nJxUbyOIF38AwipoSfnJyMqZ9SfD8jxlWV5+fnu5VX6iqgt7d3NcFeUiN0n8FbLEOoGkwdgY90dnbu7OjoeE94jG9wd1aZePRp5AOqw+9VMM+qLNRVABXKkLEWzn8S/FtbdAhnuVQE7LdVafBPq04pMYawO0OJ+6XHZkFcBQA0J1xKgyhlB0EChEWGX8RulsgjvOjEBu+5V+icWOSoFawuVwEordluG28oSCmXSs55SGSCHiXhmDzC25ghMHGbdwhJr6sAdpnyQl0FYIyoEX5CeYOuNHg/NhvGiUUxVgfV2VUAxjtqgPecp9oKoE4sNnbX9HcVgMH8nD5nAoWnKM/5ZmKyySRdq3pCmDncR4DxOwVC64eHh0OGLOcur1Vey46xUZ3IcVl5oa4OlJaWXgQwJwZyhUdGRjqE14VtSnk/mokhxnawiwUvsZmsX5u+rgKamprGMDoA5sKhRCLxpDowSpsJ8vpCj2AUPzg4uIiNfKIyNMkH6Z4hF3k+RgTYz6vVAEiKq2bsniZIC0nTtvMVMwBzoBT9tKkTHp8Ak1V8dTrOE+NgJs7VATESTH5WnVAgfHUqlXK6oHpJEI1G9zEZH/Du16leqHyS0UXBNKmeOMf5NvyislJPB8RAFz4g8IuwofLy8k319fUP1EEouw7L7mC3kUTO1nn3sb02MTFxFpsz87FfJuaH4pu5fF+reDz+DEfxkI44Q0ScSbyOpDGe1RqMBN08o+ha0L0JdeKi/6msrGwj98uZMeon1AGaSj+elr9LwK9IkO33n8cN7Hl2vp1N3PcYbUXOBbDz9bwV1/wCmXoS3+B128OPD/l2LLg8l9APXVlZKZfzfDY7ehlQv0PPQDez6zW5JJdYOXdAwHK2dGIv7GH4YtHJIvEOvvunLCHPPzl3QOLKTkl0hPbKaDUvlTU988xtwfMqQBPQ3m/4mf0yBVlDCSr/CRW0CipAMnGzb9XU1NSRvIX7kSgo++Pg9B8wltxxbHKPZgAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;" type="password">
+        </div>
+        
+        <!--Meal 1-->
+        <div class="form-group row">
+          <label class="col-12 col-form-label mealheader">Meal 1</label>
+          <label for="Protein1" class="col-1 col-form-label">Protein</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Protein1">
+          </div>
+          <label for="Carbs1" class="col-1 col-form-label">Carbs</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Carbs1">
+          </div>
+          <label for="Fats1" class="col-1 col-form-label">Fats</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Fats1">
+          </div>
+          <label for="Veg1" class="col-1 col-form-label">Veggies</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="cups" id="Veg1">
+          </div>
+        </div>
+        
+        <!--Meal 2-->
+        <div class="form-group row">
+          <label class="col-12 col-form-label mealheader">Meal 2</label>
+          <label for="Protein2" class="col-1 col-form-label">Protein</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Protein2">
+          </div>
+          <label for="Carbs2" class="col-1 col-form-label">Carbs</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Carbs2">
+          </div>
+          <label for="Fats2" class="col-1 col-form-label">Fats</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Fats2">
+          </div>
+          <label for="Veg2" class="col-1 col-form-label">Veggies</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="cups" id="Veg2">
+          </div>
+        </div>
+        
+        <!--Meal 3-->
+        <div class="form-group row">
+          <label class="col-12 col-form-label mealheader">Meal 3</label>
+          <label for="Protein3" class="col-1 col-form-label">Protein</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Protein3">
+          </div>
+          <label for="Carbs3" class="col-1 col-form-label">Carbs</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Carbs3">
+          </div>
+          <label for="Fats3" class="col-1 col-form-label">Fats</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Fats3">
+          </div>
+          <label for="Veg3" class="col-1 col-form-label">Veggies</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="cups" id="Veg3">
+          </div>
+        </div>
+        
+        <!--Meal 4-->
+        <div class="form-group row">
+          <label class="col-12 col-form-label mealheader">Meal 4</label>
+          <label for="Protein4" class="col-1 col-form-label">Protein</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Protein4">
+          </div>
+          <label for="Carbs4" class="col-1 col-form-label">Carbs</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Carbs4">
+          </div>
+          <label for="Fats4" class="col-1 col-form-label">Fats</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Fats4">
+          </div>
+          <label for="Veg4" class="col-1 col-form-label">Veggies</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="cups" id="Veg4">
+          </div>
+        </div>
+        
+        <!--Meal 5-->
+        <div class="form-group row">
+          <label class="col-12 col-form-label mealheader">Meal 5</label>
+          <label for="Protein5" class="col-1 col-form-label">Protein</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Protein5">
+          </div>
+          <label for="Carbs5" class="col-1 col-form-label">Carbs</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Carbs5">
+          </div>
+          <label for="Fats5" class="col-1 col-form-label">Fats</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Fats5">
+          </div>
+          <label for="Veg5" class="col-1 col-form-label">Veggies</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="cups" id="Veg5">
+          </div>
+        </div>
+        
+        <!--Workout Shake-->
+        <div class="form-group row">
+          <label class="col-12 col-form-label mealheader">Workout Shake</label>
+          <label for="workout_protein" class="col-1 col-form-label">Workout Protein</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="Protein5">
+          </div>
+          <label for="workout_carbs" class="col-1 col-form-label">Workout Carbs</label>
+          <div class="col-2">
+            <input class="form-control" type="text" placeholder="grams" id="workout_carbs">
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </fieldset>
+    </form>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  </body>
+</html>
