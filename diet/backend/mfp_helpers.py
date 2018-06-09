@@ -8,7 +8,7 @@ meals={
 }
 
 mealnames={
-    'meal_names_0_description': meals[0],
+    'A. 35P 3V 0F 20C': meals[0],
     'meal_names_1_description': meals[1],
     'meal_names_2_description': meals[2],
     'meal_names_3_description': meals[3],

@@ -8,7 +8,7 @@ from requests.auth import HTTPDigestAuth
 from bs4 import BeautifulSoup
 
 # custom modules
-import mfp_helpers
+from mfp_helpers import *
 
 class MFP():
     
@@ -21,6 +21,8 @@ class MFP():
         
         # login action
         self.login_url = 'https://www.myfitnesspal.com/account/login'
+        
+        self.diary_url = 'https://www.myfitnesspal.com/account/diary_settings'
         
         # Firefox
         self.headers = {
@@ -43,6 +45,29 @@ class MFP():
         
         sleep(uniform(.55,1.4))
         
-        login = s.post(self.login_url, headers=self.headers, data={'username': self.username, 'password': self.password})
-        soup = BeautifulSoup(login.content, "html.parser")
-        print(soup)
+        # login to MFP
+        login = s.post(self.login_url, headers=self.headers, verify=True, data={'username': self.username, 'password': self.password})
+        
+        # access the diary settings page
+        # diary = s.get(self.diary_url, verify=True, headers=self.headers)
+        # soup = BeautifulSoup(diary.content, "html.parser")
+        # meal0=soup.find('input', {'name': 'meal_names[0][description]'}).get('value')
+        # print(meal0)
+        
+        diary_post=s.post(self.diary_url, headers=self.headers, verify=True, data={'meal_names[0][description]': 'Appol :)'})
+        print(diary_post.status_code)
+        soup = BeautifulSoup(diary_post.content, "html.parser")
+        meal0=soup.find('input', {'name': 'meal_names[0][description]'}).get('value')
+        print(meal0)
+        
+        # payload = {'meal_names_0_description': 'Appol :)'}
+        
+        # diary_post = s.post(self.diary_url, headers=self.headers, data=payload)
+        # soup = BeautifulSoup(diary_post.content, "html.parser")
+        
+        # print(soup)
+        # meal0 = soup.find(id='meal_names_0_description')
+        # print(meal0)
+        
+        # diary = s.post(self.diary_url, headers=self.headers, data=mealnames)
+        
