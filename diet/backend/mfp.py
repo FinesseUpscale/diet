@@ -35,7 +35,7 @@ class MFP():
         # grab the session
         s = self.session
         
-        base = s.get(self.base_url)
+        base = s.get(self.login_url)
         
         soup = BeautifulSoup(base.content, "html.parser")
         token = soup.find('input', attrs={'name': 'authenticity_token'})['value']
@@ -43,6 +43,6 @@ class MFP():
         
         sleep(uniform(.55,1.4))
         
-        login = s.post(self.login_url, headers=self.headers, auth=HTTPDigestAuth(self.username, self.password))
+        login = s.post(self.login_url, headers=self.headers, data={'username': self.username, 'password': self.password})
         soup = BeautifulSoup(login.content, "html.parser")
         print(soup)
