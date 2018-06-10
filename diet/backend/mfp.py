@@ -34,13 +34,19 @@ class MFP():
         
         # grab the session
         s = self.session
+        s.headers.update(self.headers)
         
+        # visit the login url via GET so we can soup it for the access token
         base = s.get(self.login_url)
         
+        # soup the response to the login URL GET request to scrape the token
         soup = BeautifulSoup(base.content, "html.parser")
         token = soup.find('input', attrs={'name': 'authenticity_token'})['value']
-        self.headers.update({'authenticity_token': token})
         
+        # add token to headers for continued authentication
+        s.headers.update({'authenticity_token': token})
+        
+        # sleep for a moment before logging in
         sleep(uniform(.55,1.4))
         
         # login to MFP
@@ -50,26 +56,48 @@ class MFP():
         # access the diary settings page
         diary = s.get(self.diary_url, verify=True, headers=self.headers)
         
-        # parse the webpage with bs4
+        # soup the webpage with bs4
         soup = BeautifulSoup(diary.content, "html.parser")
         
         # grab the name of my first meal to see if this actually works
-        meal0=soup.find('input', {'name': 'meal_names[0][description]'
-            }).get('value')
-        # print meal to visually check it's right (it is)
-        print(meal0)
+        # found the key 'mean_names[0][description]' via 'view page source' on browser
+        # meal0=soup.find('input', {'name': 'meal_names[0][description]'
+        #     }).get('value')
+        # print(meal0)
         
-        # Great, we're in, now let's wait a sec just so we seem normal
+        # see if auth token has changed
+        old_token = s.headers['authenticity_token']
+        new_token = soup.find('input', attrs={'name': 'authenticity_token'})['value']
+        if(old_token==new_token):
+            print("Same token :)")
+        else:
+            print("Different tokens! :(")
+        
+        
+        # ~~~~~~~~ #
+        #
+        # cut off code for now
+        #
+        #
+        # ~~~~~~~~ #
+        
+        
+        return 0
+        
+        # Great, we're in, now let's wait again so our request isn't ignored
         sleep(uniform(.55,1.4))
         
         # Attempt to update the name of the first meal via POST method to
-        # see if we can actually change it. (It doesn't, mealname is unchanged).
+        # see if we can actually change it.
         diary_post=s.post(self.diary_url, headers=self.headers, verify=True,
             data={'meal_names[0][description]': 'updated meal 0 test name'})
         
-        # Above code doesn't work. Status code is 200, so that's not the issue
-        # so check to see what the diary_post response actually looks like
+        # this does not work, refreshing the webpage shows that
+        # the mealnames are unchanged. However, the status code is 200.
+        
+        # Why is POST ineffective? Let's see what the response looks like
         soup = BeautifulSoup(diary_post.content, "html.parser")
         print(soup)
-        # It prints the login page! Our session ended!
+        
+        # It prints the login page! Our session ended?
         # Why does this post method not work? It seems like I've done everything right.
