@@ -49,16 +49,19 @@ class MFP():
         login = s.post(self.login_url, headers=self.headers, verify=True, data={'username': self.username, 'password': self.password})
         
         # access the diary settings page
-        # diary = s.get(self.diary_url, verify=True, headers=self.headers)
-        # soup = BeautifulSoup(diary.content, "html.parser")
-        # meal0=soup.find('input', {'name': 'meal_names[0][description]'}).get('value')
-        # print(meal0)
-        
-        diary_post=s.post(self.diary_url, headers=self.headers, verify=True, data={'meal_names[0][description]': 'Appol :)'})
-        print(diary_post.status_code)
-        soup = BeautifulSoup(diary_post.content, "html.parser")
+        diary = s.get(self.diary_url, verify=True, headers=self.headers)
+        soup = BeautifulSoup(diary.content, "html.parser")
         meal0=soup.find('input', {'name': 'meal_names[0][description]'}).get('value')
         print(meal0)
+        
+        diary_post=s.post(self.diary_url, headers=self.headers, verify=True, data={'meal_names[0][description]': 'Appol :)'})
+        # print(diary_post.status_code)
+        # soup = BeautifulSoup(diary_post.content, "html.parser")
+        
+        # print(soup)
+        
+        # meal0=soup.find('input', {'name': 'meal_names[0][description]'}).get('value')
+        # print(meal0)
         
         # payload = {'meal_names_0_description': 'Appol :)'}
         
