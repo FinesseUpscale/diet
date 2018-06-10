@@ -7,9 +7,6 @@ import requests
 from requests.auth import HTTPDigestAuth
 from bs4 import BeautifulSoup
 
-# custom modules
-from mfp_helpers import *
-
 class MFP():
     
     def __init__(self, username, password):
@@ -22,6 +19,7 @@ class MFP():
         # login action
         self.login_url = 'https://www.myfitnesspal.com/account/login'
         
+        # page that contains diary information we want to update
         self.diary_url = 'https://www.myfitnesspal.com/account/diary_settings'
         
         # Firefox
@@ -46,31 +44,32 @@ class MFP():
         sleep(uniform(.55,1.4))
         
         # login to MFP
-        login = s.post(self.login_url, headers=self.headers, verify=True, data={'username': self.username, 'password': self.password})
+        login = s.post(self.login_url, headers=self.headers, verify=True,
+            data={'username': self.username, 'password': self.password})
         
         # access the diary settings page
         diary = s.get(self.diary_url, verify=True, headers=self.headers)
+        
+        # parse the webpage with bs4
         soup = BeautifulSoup(diary.content, "html.parser")
-        meal0=soup.find('input', {'name': 'meal_names[0][description]'}).get('value')
+        
+        # grab the name of my first meal to see if this actually works
+        meal0=soup.find('input', {'name': 'meal_names[0][description]'
+            }).get('value')
+        # print meal to visually check it's right (it is)
         print(meal0)
         
-        diary_post=s.post(self.diary_url, headers=self.headers, verify=True, data={'meal_names[0][description]': 'Appol :)'})
-        # print(diary_post.status_code)
-        # soup = BeautifulSoup(diary_post.content, "html.parser")
+        # Great, we're in, now let's wait a sec just so we seem normal
+        sleep(uniform(.55,1.4))
         
-        # print(soup)
+        # Attempt to update the name of the first meal via POST method to
+        # see if we can actually change it. (It doesn't, mealname is unchanged).
+        diary_post=s.post(self.diary_url, headers=self.headers, verify=True,
+            data={'meal_names[0][description]': 'updated meal 0 test name'})
         
-        # meal0=soup.find('input', {'name': 'meal_names[0][description]'}).get('value')
-        # print(meal0)
-        
-        # payload = {'meal_names_0_description': 'Appol :)'}
-        
-        # diary_post = s.post(self.diary_url, headers=self.headers, data=payload)
-        # soup = BeautifulSoup(diary_post.content, "html.parser")
-        
-        # print(soup)
-        # meal0 = soup.find(id='meal_names_0_description')
-        # print(meal0)
-        
-        # diary = s.post(self.diary_url, headers=self.headers, data=mealnames)
-        
+        # Above code doesn't work. Status code is 200, so that's not the issue
+        # so check to see what the diary_post response actually looks like
+        soup = BeautifulSoup(diary_post.content, "html.parser")
+        print(soup)
+        # It prints the login page! Our session ended!
+        # Why does this post method not work? It seems like I've done everything right.
