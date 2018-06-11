@@ -19,6 +19,9 @@ class MFP():
         # login action
         self.login_url = 'https://www.myfitnesspal.com/account/login'
         
+        # account settings intermediate URL
+        self.account_settings = 'https://www.myfitnesspal.com/account/settings'
+        
         # page that contains diary information we want to update
         self.diary_url = 'https://www.myfitnesspal.com/account/diary_settings'
         
@@ -41,38 +44,48 @@ class MFP():
         
         # soup the response to the login URL GET request to scrape the token
         soup = BeautifulSoup(base.content, "html.parser")
-        token = soup.find('input', attrs={'name': 'authenticity_token'})['value']
+        auth_token = soup.find('input', attrs={'name': 'authenticity_token'})['value']
         
         # add token to headers for continued authentication
-        s.headers.update({'authenticity_token': token})
+        s.headers.update({'authenticity_token': auth_token})
+        print(auth_token)
         
         # sleep for a moment before logging in
-        sleep(uniform(.55,1.4))
+        sleep(uniform(1.4,3.1))
         
         # login to MFP
         login = s.post(self.login_url, headers=self.headers, verify=True,
-            data={'username': self.username, 'password': self.password})
+            data={'username': self.username, 'password': self.password, 'remember_me':True})
+        
+        sleep(uniform(1.5,3))
+        
+        # access the account settings page
+        account_settings = s.get(self.account_settings, headers=s.headers)
+        new_token = soup.find('input', attrs={'name': 'authenticity_token'})['value']
+        s.headers['authenticity_token'] = new_token
+        print(new_token)
+        
+        sleep(uniform(1.4,3.1))
         
         # access the diary settings page
-        diary = s.get(self.diary_url, verify=True, headers=self.headers)
+        diary = s.get(self.diary_url, verify=True, headers=s.headers)
         
         # soup the webpage with bs4
         soup = BeautifulSoup(diary.content, "html.parser")
         
         # grab the name of my first meal to see if this actually works
         # found the key 'mean_names[0][description]' via 'view page source' on browser
-        # meal0=soup.find('input', {'name': 'meal_names[0][description]'
-        #     }).get('value')
-        # print(meal0)
+        meal0=soup.find('input', {'name': 'meal_names[0][description]'
+            }).get('value')
+        print(meal0)
         
-        # see if auth token has changed
-        old_token = s.headers['authenticity_token']
         new_token = soup.find('input', attrs={'name': 'authenticity_token'})['value']
-        if(old_token==new_token):
-            print("Same token :)")
-        else:
-            print("Different tokens! :(")
+        s.headers['authenticity_token'] = new_token
+        print(new_token)
         
+        # do this https://brennan.io/2016/03/02/logging-in-with-requests/
+        # See if there's a hidden CSRF token in the save changes form
+        # if so, work around it
         
         # ~~~~~~~~ #
         #
@@ -81,23 +94,24 @@ class MFP():
         #
         # ~~~~~~~~ #
         
-        
-        return 0
-        
         # Great, we're in, now let's wait again so our request isn't ignored
-        sleep(uniform(.55,1.4))
+        sleep(uniform(1.5,3))
         
         # Attempt to update the name of the first meal via POST method to
         # see if we can actually change it.
-        diary_post=s.post(self.diary_url, headers=self.headers, verify=True,
-            data={'meal_names[0][description]': 'updated meal 0 test name'})
+        
+        diary_post=s.post(self.diary_url, headers=s.headers, verify=True,
+            data={'username': self.username, 'password': self.password,
+            'meal_names[0][description]': 'updated meal 0 test name'})
+        
+        print(diary_post.url)
         
         # this does not work, refreshing the webpage shows that
         # the mealnames are unchanged. However, the status code is 200.
         
         # Why is POST ineffective? Let's see what the response looks like
-        soup = BeautifulSoup(diary_post.content, "html.parser")
-        print(soup)
+        # soup = BeautifulSoup(diary_post.content, "html.parser")
+        # print(soup)
         
         # It prints the login page! Our session ended?
         # Why does this post method not work? It seems like I've done everything right.
